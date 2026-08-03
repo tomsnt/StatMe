@@ -121,9 +121,17 @@ Icon in top-right shows active span (e.g. "6m"). Tapping cycles or shows a picke
 All theme-sensitive UI values MUST reference the active theme object — never hardcode hex
 colors in component files. Use a `useTheme()` hook that returns the active theme.
 
-Built-in themes (bicolor pairs — hex values TBD by user):
-- **Antracite** (default): dark anthracite bg, white fg
-- More built-in themes TBD
+Built-in themes (bg → fg):
+- **Simple** (default): `#1A141F` → `#EBEBEB`
+- **Sour**: `#6D329C` → `#929C32`
+- **Copper**: `#9C4A19` → `#329B9C`
+- **Coral**: `#57C2CF` → `#CF691D`
+- **Poison**: `#DD84F2` → `#810ECF`
+
+**Inverted flag**: each theme (built-in and custom) has an `inverted: boolean` toggle
+shown as a button next to the theme selector in Settings. When active, bg and fg are swapped.
+This is a display-level transform — do not store swapped values, just apply the swap at
+render time via `useTheme()`. The `inverted` state is stored per-user in prefs.
 
 Custom themes: user picks 2 colors via color picker + names it → saved locally and synced
 to Firebase under `users/{uid}/themes`.

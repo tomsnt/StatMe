@@ -15,7 +15,7 @@
 - [ ] `src/utils/time.ts`: parseTimeInput("1.30" → 90min), formatMinutes(90 → "1.30"), sumTimeValues, formatTooltip(90 → "1h 30m")
 - [ ] `src/utils/color.ts`: getGroupDotColor(entries, definitions), lighten/darken helpers
 - [ ] `src/utils/format.ts`: formatDate, groupEntriesByDate, groupEntriesByGroup
-- [ ] `src/constants/themes.ts`: define built-in themes (Antracite default + others once colors confirmed with user)
+- [ ] `src/constants/themes.ts`: define built-in themes (Simple, Sour, Copper, Coral, Poison) with inverted flag support
 - [ ] `src/constants/defaultChartPrefs.ts`: default chart preferences object
 - [ ] Write unit tests for time.ts arithmetic (critical edge cases: 0.45+0.30=1.15, rounding)
 
@@ -59,6 +59,7 @@
 - [ ] **Theme section**: list of built-in themes as selectable swatches, active theme highlighted
 - [ ] "Create custom theme" option: color picker for bg + fg, name input, save
 - [ ] Custom theme management: edit/delete custom themes
+- [ ] "Inverted" toggle button next to theme selector: swaps bg↔fg at render time, stored in user prefs
 - [ ] **Chart style section**: controls for lineStyle, dataPoint, verticalLine (visible, style, opacity slider)
 - [ ] Live preview of chart style options
 - [ ] **Sync section**: "Sync with Google" toggle + Google account info when signed in
@@ -98,6 +99,4 @@
 - [ ] Submit to TestFlight (iOS) for personal testing
 
 ## Open Items (needs user input)
-- [ ] Confirm built-in theme color pairs (bg + fg hex values for each theme)
-- [ ] Confirm which additional built-in themes to include beyond Antracite
 - [ ] Confirm time span default (currently set to 1m — change?)
