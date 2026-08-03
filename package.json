@@ -1,15 +1,35 @@
 {
   "name": "statme",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "dependencies": {
+    "@expo/vector-icons": "^15.0.2",
+    "date-fns": "^4.4.0",
+    "drizzle-orm": "^0.45.2",
     "expo": "~57.0.9",
+    "expo-auth-session": "~57.0.5",
+    "expo-crypto": "~57.0.1",
+    "expo-document-picker": "~57.0.1",
+    "expo-file-system": "~57.0.1",
+    "expo-haptics": "~57.0.1",
+    "expo-router": "~57.0.9",
+    "expo-sharing": "~57.0.8",
+    "expo-sqlite": "~57.0.1",
     "expo-status-bar": "~57.0.1",
+    "expo-web-browser": "~57.0.2",
+    "firebase": "^12.17.0",
     "react": "19.2.3",
-    "react-native": "0.86.2"
+    "react-native": "0.86.2",
+    "react-native-gesture-handler": "~2.32.0",
+    "react-native-gifted-charts": "^1.4.77",
+    "react-native-reanimated": "4.5.1",
+    "react-native-svg": "15.15.4",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@types/date-fns": "^2.5.3",
     "@types/react": "~19.2.2",
+    "drizzle-kit": "^0.31.10",
     "typescript": "~6.0.3"
   },
   "scripts": {
