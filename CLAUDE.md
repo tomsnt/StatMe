@@ -5,7 +5,7 @@
 ## Project Overview
 StatMe is a React Native (Expo) mobile app for tracking personal statistics day by day.
 Features: dark-themed calendar with colored dots, line charts per stat group, full theming
-and chart customization, local + Firebase cloud sync.
+and chart customization, local SQLite storage with JSON export backup.
 
 ## Tech Stack
 - **Framework**: React Native with Expo SDK (latest stable)
@@ -13,8 +13,7 @@ and chart customization, local + Firebase cloud sync.
 - **Navigation**: Expo Router (file-based, tab layout)
 - **State**: Zustand
 - **Local DB**: expo-sqlite via Drizzle ORM
-- **Cloud**: Firebase (Firestore + Google Sign-In via expo-auth-session)
-- **Charts**: Victory Native XL
+- **Charts**: react-native-gifted-charts
 - **Date handling**: date-fns
 
 ## Project Structure
@@ -31,7 +30,6 @@ src/
   db/                    # Drizzle schema + migrations
   store/                 # Zustand stores (stats, theme, chartPrefs)
   hooks/                 # Custom hooks
-  firebase/              # Firebase init + sync logic
   utils/                 # time.ts, color.ts, format.ts
   constants/             # themes.ts, defaultChartPrefs.ts
 ```
@@ -133,15 +131,7 @@ shown as a button next to the theme selector in Settings. When active, bg and fg
 This is a display-level transform — do not store swapped values, just apply the swap at
 render time via `useTheme()`. The `inverted` state is stored per-user in prefs.
 
-Custom themes: user picks 2 colors via color picker + names it → saved locally and synced
-to Firebase under `users/{uid}/themes`.
-
-## Firebase Sync
-- Auth: Google Sign-In via `expo-auth-session` + `expo-web-browser`
-- Firestore path: `users/{uid}/groups`, `.../definitions`, `.../entries`, `.../themes`, `.../prefs`
-- Sync strategy: last-write-wins using `updatedAt` timestamps
-- Settings toggle "Sync with Google": when OFF, all operations are local-only (SQLite)
-- On first Google sign-in: merge local data into Firestore
+Custom themes: user picks 2 colors via color picker + names it → saved locally in SQLite.
 
 ## Backup / Export
 - Settings action: export all entries for a selected year as JSON
@@ -163,4 +153,4 @@ npx drizzle-kit migrate   # Apply migrations
 - Dates stored as `YYYY-MM-DD` strings — local date only, no UTC conversion
 - File naming: components PascalCase, utilities camelCase, hooks `use` prefix
 - No inline styles — use `StyleSheet.create`
-- Zustand stores: one file per domain (statsStore, themeStore, chartPrefsStore, syncStore)
+- Zustand stores: one file per domain (statsStore, themeStore, chartPrefsStore)

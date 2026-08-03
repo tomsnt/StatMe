@@ -4,7 +4,6 @@ import { statGroups, statDefinitions, statEntries, userPrefs, customThemes } fro
 import { useStatsStore } from '../store/statsStore';
 import { useThemeStore } from '../store/themeStore';
 import { useChartPrefsStore } from '../store/chartPrefsStore';
-import { useSyncStore } from '../store/syncStore';
 import { DEFAULT_CHART_PREFS } from '../constants/chartPrefs';
 
 export function useInitApp() {
@@ -34,9 +33,6 @@ export function useInitApp() {
       }
       if (prefsMap['inverted']) {
         useThemeStore.getState().setInverted(prefsMap['inverted'] === 'true');
-      }
-      if (prefsMap['syncEnabled']) {
-        useSyncStore.getState().setEnabled(prefsMap['syncEnabled'] === 'true');
       }
       if (prefsMap['chartPrefs']) {
         try {

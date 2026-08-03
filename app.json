@@ -26,7 +26,6 @@
     "plugins": [
       "expo-router",
       "expo-sharing",
-      "expo-web-browser",
       "expo-sqlite"
     ],
     "experiments": {

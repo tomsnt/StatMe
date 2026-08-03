@@ -1,102 +1,74 @@
 # StatMe — TODO & Development Roadmap
 
-## Phase 1 — Project Setup & Architecture
-- [ ] Install core dependencies: expo-router, zustand, drizzle-orm, expo-sqlite, date-fns, victory-native-xl, react-native-svg
-- [ ] Install Firebase dependencies: @react-native-firebase/app, @react-native-firebase/firestore, @react-native-firebase/auth, expo-auth-session, expo-web-browser
-- [ ] Set up Expo Router file structure (tabs: index, statistics, settings + modals)
-- [ ] Configure TypeScript strict mode in tsconfig.json
-- [ ] Set up Drizzle ORM schema (StatGroup, StatDefinition, StatEntry, UserPrefs tables)
-- [ ] Run first DB migration
-- [ ] Create Zustand stores: statsStore, themeStore, chartPrefsStore, syncStore
-- [ ] Create Firebase project on console.firebase.google.com and add google-services.json / GoogleService-Info.plist
-- [ ] Set up useTheme() hook wired to themeStore
+## Phase 1 — Project Setup & Architecture ✅
+- [x] Install core dependencies: expo-router, zustand, drizzle-orm, expo-sqlite, date-fns, react-native-gifted-charts, react-native-svg
+- [x] Set up Expo Router file structure (tabs: index, statistics, settings + modals)
+- [x] Configure TypeScript strict mode in tsconfig.json
+- [x] Set up Drizzle ORM schema (StatGroup, StatDefinition, StatEntry, UserPrefs, CustomThemes)
+- [x] Create Zustand stores: statsStore, themeStore, chartPrefsStore
+- [x] Set up useTheme() hook wired to themeStore
+- [x] Create useInitApp() hook — loads DB into stores on startup
 
-## Phase 2 — Core Utilities
-- [ ] `src/utils/time.ts`: parseTimeInput("1.30" → 90min), formatMinutes(90 → "1.30"), sumTimeValues, formatTooltip(90 → "1h 30m")
-- [ ] `src/utils/color.ts`: getGroupDotColor(entries, definitions), lighten/darken helpers
-- [ ] `src/utils/format.ts`: formatDate, groupEntriesByDate, groupEntriesByGroup
-- [ ] `src/constants/themes.ts`: define built-in themes (Simple, Sour, Copper, Coral, Poison) with inverted flag support
-- [ ] `src/constants/defaultChartPrefs.ts`: default chart preferences object
-- [ ] Write unit tests for time.ts arithmetic (critical edge cases: 0.45+0.30=1.15, rounding)
+## Phase 2 — Core Utilities ✅
+- [x] `src/utils/time.ts`: parseTimeInput, formatMinutes, sumTimeValues, formatMinutesToLabel
+- [x] `src/utils/color.ts`: getCalendarDotColor (dot logic per group)
+- [x] `src/utils/format.ts`: formatDate, monthDays, formatMonthYear
+- [x] `src/constants/themes.ts`: Simple, Sour, Copper, Coral, Poison + inverted flag logic
+- [x] `src/constants/chartPrefs.ts`: default chart preferences
+- [x] `src/constants/timeSpan.ts`: 1m | 3m | 6m | 1y | 2y
 
 ## Phase 3 — Calendar Screen (Tab 1)
-- [ ] Build CalendarGrid component: custom month grid, white lines on theme bg
+- [ ] Build CalendarGrid component: custom month grid, lines in fg color on bg
 - [ ] DayCell component: shows day number + colored dot(s)
-- [ ] Implement dot logic: multi-group = multiple dots, single-group = highest-value stat color
-- [ ] Month navigation (swipe or arrows)
-- [ ] Header: date top-left (current month/year), "+" button top-right
-- [ ] "+" button opens add-entry modal (Expo Router modal route)
+- [ ] Implement dot logic via getCalendarDotColor (multi-group = multiple dots, single-group = highest-value stat color)
+- [ ] Month navigation (swipe left/right or arrow buttons)
 - [ ] Highlight today's cell
-- [ ] Tap on day cell → show summary popover/sheet of entries for that day
+- [ ] Tap on day cell → show bottom sheet with summary of entries for that day
 
 ## Phase 4 — Add Entry Modal
-- [ ] Route: `app/add-entry.tsx` (modal presentation)
-- [ ] Stat selector: searchable list of existing StatDefinitions + "Create new" option
-- [ ] When creating new stat: name input, color picker, valueLabel input, isTimeBased toggle (permanent warning shown)
-- [ ] Group selector: list of existing StatGroups + "Create new" option
+- [ ] Stat selector: list of existing StatDefinitions + "Crea nuova" option
+- [ ] When creating new stat: name input, color picker, valueLabel input, isTimeBased toggle (permanent — show warning)
+- [ ] Group selector: list of existing StatGroups + "Crea nuovo gruppo" option
 - [ ] Value input: numeric keyboard, decimal support
-  - If isTimeBased: show "H.MM" hint, validate MM < 60, parse to minutes on save
+  - If isTimeBased: show "H.MM" placeholder, validate MM < 60, store as total minutes
   - If not timeBased: standard decimal input
-- [ ] isTimeBased toggle: shown but locked (non-editable) if definition already exists
+- [ ] isTimeBased: locked (non-editable) when definition already exists, shown as read-only badge
 - [ ] Optional description text input
-- [ ] "Aggiungi" button: validates, saves to SQLite, triggers sync if enabled
-- [ ] Success feedback + close modal
+- [ ] "Aggiungi" button: validates → saves to SQLite → updates statsStore → haptic → close modal
 
 ## Phase 5 — Statistics Screen (Tab 2)
-- [ ] Route: `app/(tabs)/statistics.tsx`
-- [ ] Header: "Statistiche" title + time span selector icon top-right (shows current: "1m", "6m", etc.)
-- [ ] Time span picker: cycles through 1m | 3m | 6m | 1y | 2y on tap, or bottom sheet picker
-- [ ] Groups list: each group card shows group name + mini line chart with all its stat lines overlaid
-- [ ] Tap group card → navigate to group detail screen
-- [ ] Group detail screen: shows each StatDefinition as a separate chart card
-- [ ] Individual stat chart: full line chart with VictoryNativeXL, respects ChartPreferences
-- [ ] Apply chart prefs: line style (smooth/sharp), data points (none/circle/diamond), vertical line (visible/style/opacity)
+- [ ] Groups list: each group card shows group name + mini line chart (all stat lines overlaid)
+- [ ] Tap group card → group detail screen with individual chart per StatDefinition
+- [ ] Individual stat chart: line chart via react-native-gifted-charts, respects ChartPreferences
+- [ ] Apply chart prefs: line style (smooth/sharp), data points (none/circle/diamond), vertical line
 - [ ] Y-axis: format as "H.MM" for timeBased stats, raw number otherwise
-- [ ] Tooltip on data point tap: date + value (formatted)
+- [ ] Tooltip on data point tap: date + formatted value
+- [ ] Time span selector cycles through 1m | 3m | 6m | 1y | 2y
 
 ## Phase 6 — Settings Screen (Tab 3)
-- [ ] Route: `app/(tabs)/settings.tsx`
-- [ ] **Theme section**: list of built-in themes as selectable swatches, active theme highlighted
-- [ ] "Create custom theme" option: color picker for bg + fg, name input, save
-- [ ] Custom theme management: edit/delete custom themes
-- [ ] "Inverted" toggle button next to theme selector: swaps bg↔fg at render time, stored in user prefs
-- [ ] **Chart style section**: controls for lineStyle, dataPoint, verticalLine (visible, style, opacity slider)
-- [ ] Live preview of chart style options
-- [ ] **Sync section**: "Sync with Google" toggle + Google account info when signed in
-- [ ] Google Sign-In flow (expo-auth-session)
-- [ ] Sign-out option
-- [ ] **Backup section**: "Export year" picker (year selector) + export button → share JSON file
-- [ ] Import JSON backup option (restore from file)
+- [ ] **Theme section**: horizontal list of built-in theme swatches, active one highlighted
+- [ ] "Inverted" toggle button next to active theme
+- [ ] "Crea tema custom" option: color picker for bg + fg, name input, save to SQLite
+- [ ] Custom theme management: delete custom themes
+- [ ] **Chart style section**: lineStyle picker, dataPoint picker, verticalLine controls (visible toggle, solid/dashed, opacity slider)
+- [ ] Live mini-chart preview that reflects selected chart prefs
+- [ ] **Backup section**: year selector + "Esporta JSON" button → expo-sharing share sheet
+- [ ] Import JSON backup (restore from file via expo-document-picker)
 - [ ] App version info at bottom
+- [ ] All prefs persisted to SQLite `user_prefs` table on change
 
-## Phase 7 — Firebase Sync
-- [ ] syncStore: manages sync state (enabled, lastSyncAt, userId, error)
-- [ ] On Google sign-in: upload all local SQLite data to Firestore (merge strategy)
-- [ ] Real-time listeners on Firestore collections → update local SQLite on change
-- [ ] Conflict resolution: compare `updatedAt`, keep newer record
-- [ ] Offline support: Firestore offline persistence enabled by default
-- [ ] Sync custom themes and chart prefs to `users/{uid}/prefs`
-- [ ] Handle sign-out: disable sync, keep local data
-
-## Phase 8 — Polish & UX
-- [ ] Smooth tab transitions
+## Phase 7 — Polish & UX
 - [ ] Loading states for all async operations
 - [ ] Empty states: calendar with no entries, statistics with no data
 - [ ] Haptic feedback on "Aggiungi" success (expo-haptics)
-- [ ] Pull-to-refresh on statistics screen
 - [ ] Keyboard avoiding behavior in add-entry modal
-- [ ] Accessibility: proper accessibilityLabel on all interactive elements
-- [ ] iOS safe area insets handled everywhere
+- [ ] iOS safe area insets handled everywhere (useSafeAreaInsets)
+- [ ] Smooth animations on modal open/close
 
-## Phase 9 — Testing & Release Prep
-- [ ] Unit tests: time utils, color logic, group dot logic
-- [ ] Integration tests: add entry flow, stat creation flow
+## Phase 8 — Testing & Release Prep
+- [ ] Unit tests: time.ts arithmetic edge cases (0.45+0.30=1.15, rounding)
 - [ ] Test on iPhone simulator (multiple screen sizes)
 - [ ] Test on Android emulator
 - [ ] Set up EAS Build for production builds
-- [ ] Configure app.json: name "StatMe", bundle ID `com.tomsnt.statme`, icons, splash screen
 - [ ] Design app icon and splash screen
 - [ ] Submit to TestFlight (iOS) for personal testing
-
-## Open Items (needs user input)
-- [ ] Confirm time span default (currently set to 1m — change?)
