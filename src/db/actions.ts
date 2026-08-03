@@ -1,7 +1,7 @@
 import { db } from './index';
-import { statGroups, statDefinitions, statEntries, userPrefs } from './schema';
-import type { NewStatGroup, NewStatDefinition, NewStatEntry, StatGroup, StatDefinition, StatEntry } from './schema';
-import { sql } from 'drizzle-orm';
+import { statGroups, statDefinitions, statEntries, userPrefs, customThemes } from './schema';
+import type { NewStatGroup, NewStatDefinition, NewStatEntry, NewCustomTheme, StatGroup, StatDefinition, StatEntry, CustomTheme } from './schema';
+import { eq, sql } from 'drizzle-orm';
 
 export async function insertGroup(data: NewStatGroup): Promise<StatGroup> {
   await db.insert(statGroups).values(data);
@@ -16,6 +16,15 @@ export async function insertDefinition(data: NewStatDefinition): Promise<StatDef
 export async function insertEntry(data: NewStatEntry): Promise<StatEntry> {
   await db.insert(statEntries).values(data);
   return data as StatEntry;
+}
+
+export async function insertCustomTheme(data: NewCustomTheme): Promise<CustomTheme> {
+  await db.insert(customThemes).values(data);
+  return data as CustomTheme;
+}
+
+export async function deleteCustomTheme(id: string): Promise<void> {
+  await db.delete(customThemes).where(eq(customThemes.id, id));
 }
 
 export async function savePref(key: string, value: string): Promise<void> {

@@ -49,3 +49,4 @@ export type NewStatDefinition = typeof statDefinitions.$inferInsert;
 export type StatEntry = typeof statEntries.$inferSelect;
 export type NewStatEntry = typeof statEntries.$inferInsert;
 export type CustomTheme = typeof customThemes.$inferSelect;
+export type NewCustomTheme = typeof customThemes.$inferInsert;
