@@ -25,6 +25,7 @@ export default function RootLayout() {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="add-entry" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="group-detail/[id]" />
           <Stack.Screen name="stat-detail/[id]" />
         </Stack>
       </GestureHandlerRootView>
